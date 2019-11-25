@@ -1,7 +1,8 @@
 import cv2 as cv
+import numpy as np
 
 img=cv.imread('iris.png')
-#1 Zamiana obrazu na obraz w skali szarości
+#1 Zamiana obrazu na obraz w skali szarosci
 gray_img = cv.cvtColor(img, cv.COLOR_RGB2GRAY)
 #2 Normalizacja histogramu
 
@@ -21,12 +22,34 @@ cv.imwrite('pupil_bin.png', pupil_bin)
 pupil_bin_cleared=cv.imread('pupil_bin_cleared.png')
 iris_bin_cleared=cv.imread('iris_bin_cleared.png')
 
-pupil_edges=cv.Canny(pupil_bin_cleared, 100, 200)
-iris_edges=cv.Canny(iris_bin_cleared, 100, 200)
-cv.imshow('edges', pupil_edges)
-cv.imshow('edges_iris', iris_edges)
+pupil_bin_cleared = cv.cvtColor(pupil_bin_cleared, cv.COLOR_RGB2GRAY)
+iris_bin_cleared = cv.cvtColor(iris_bin_cleared, cv.COLOR_RGB2GRAY)
 
+cv.imshow('bin', pupil_bin_cleared)
+cv.waitKey()
 
+# pupil_edges=cv.Canny(pupil_bin_cleared, 100, 200)
+# iris_edges=cv.Canny(iris_bin_cleared, 100, 200)
+# cv.imshow('edges', pupil_edges)
+# cv.imshow('edges_iris', iris_edges)
+
+detected_circles=cv.HoughCircles(pupil_bin_cleared, cv.HOUGH_GRADIENT, 1, 200, param1=30, param2=15)
+print(detected_circles)
+if detected_circles is not None:
+
+    # Convert the circle parameters a, b and r to integers.
+    detected_circles = np.uint16(np.around(detected_circles))
+
+    for pt in detected_circles[0, :]:
+        a, b, r = pt[0], pt[1], pt[2]
+
+        # Draw the circumference of the circle.
+        cv.circle(img, (a, b), r, (0, 255, 0), 2)
+
+        # Draw a small circle (of radius 1) to show the center.
+        cv.circle(img, (a, b), 1, (0, 0, 255), 3)
+        cv.imshow("Detected Circle", img)
+        cv.waitKey(0)
 
 
 cv.waitKey()
