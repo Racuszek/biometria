@@ -56,6 +56,20 @@ pupil_bin_cleared = cv.cvtColor(pupil_bin_cleared, cv.COLOR_RGB2GRAY)
 iris_bin_cleared = cv.cvtColor(iris_bin_cleared, cv.COLOR_RGB2GRAY)
 
 eye_circles=cv.HoughCircles(pupil_bin_cleared, cv.HOUGH_GRADIENT, 1, 200, param1=30, param2=15)
+detected_circles = np.uint16(np.around(eye_circles))
+for pt in detected_circles[0, :]:
+        a, b, r = pt[0], pt[1], pt[2]
+
+        # Draw the circumference of the circle.
+        cv.circle(img, (a, b), r, (0, 255, 0), 1)
+
+        cv.circle(img, (a, b), r+25, (0, 255, 0), 1)
+
+        # Draw a small circle (of radius 1) to show the center.
+        cv.circle(img, (a, b), 1, (0, 0, 255), 3)
+        cv.imshow("Detected Circle", img)
+        cv.waitKey(0)
+
 if eye_circles is not None:
     circle = eye_circles[0][0]
     iris_coordinates = (circle[0], circle[1])
