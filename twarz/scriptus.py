@@ -1,7 +1,6 @@
 import numpy as np
 import cv2 as cv
-faces_list=['twarz_ideal.png', 'twarz1.png', 'twarz2.png', 'twarz3.png', 'twarz4.png', 'twarz5.png', 'twarz6.png', 'twarz8.jpg', 'twarz9.jpeg']
-
+faces_list=['twarz3.png']
 # Metoda RGB
 for facename in faces_list:
     input=cv.imread(facename)
@@ -15,8 +14,24 @@ for facename in faces_list:
     final = np.zeros((height,width, 3), np.uint8)
     binarised = cv.cvtColor(binarised, cv.COLOR_RGB2GRAY)
 
-    for i in range(height):
-        for j in range(width):
-            final[i][j]=input[i][j] if binarised[i][j]==255 else [0, 0, 0]
-    cv.imshow('woo', final)
+    kernel=np.ones((5,5), np.uint)
+    binarised=cv.dilate(binarised, kernel, iterations=2)
+    binarised=cv.erode(binarised, kernel, iterations=2)
+    binarised=cv.dilate(binarised, kernel, iterations=2)
+    binarised=cv.erode(binarised, kernel, iterations=2)
+    cv.imshow('mask', binarised)
     cv.waitKey()
+
+    stencil = np.ones(input.shape).astype(input.dtype)
+    color=[255, 255, 255]
+
+    contours, hier = cv.findContours(binarised,cv.RETR_TREE,cv.CHAIN_APPROX_SIMPLE)
+    cv.drawContours(input, contours, -1, (100,0,0),2)
+    for cnt in contours:
+        if 600<cv.contourArea(cnt):
+            cv.fillPoly(stencil, [cnt], color)
+            result=cv.bitwise_and(input, stencil)
+            cv.imshow('woo', result)
+            cv.waitKey()
+            print('saving...')
+            cv.imwrite('{}_cont.jpg'.format(facename[:-4]), result)
