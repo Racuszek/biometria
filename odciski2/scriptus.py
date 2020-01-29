@@ -11,7 +11,7 @@ def parse(filename):
         else:
             if line[0].isalpha():
                 name=line.split()[0]
-                print(name)
+                # print(name)
                 globals()[name]=[]
             else:
                 vector_as_list=[float(item) for item in line[1:].split(' ')]
@@ -50,3 +50,11 @@ model_kciuk=count_mean_dict(parse('kciuk1.txt'), parse('kciuk2.txt'))
 model_wskazujacy=count_mean_dict(parse('wskazujacy1.txt'), parse('wskazujacy2.txt'))
 model_srodkowy=count_mean_dict(parse('srodkowy1.txt'), parse('srodkowy2.txt'))
 model_serdeczny=count_mean_dict(parse('serdeczny1.txt'), parse('serdeczny2.txt'))
+
+def points_distance(tup1, tup2):
+    (tup1[0]-tup1[0])**2
+
+def sum_distances(dict1, dict2):
+    sum=0
+    for key in dict1.keys():
+        
