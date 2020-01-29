@@ -24,4 +24,29 @@ def parse(filename):
     return dict_of_minutiae
 
 # print(parse('kciuk_p_01.txt'))
+def count_mean_tuple(tup1, tup2):
+    long_list=[]
+    for c, d in zip(tup1, tup2):
+        mean_list=[(a+b)/2 for a, b in zip(c, d)]
+        long_list.append(tuple(mean_list))
+    return tuple(long_list)
 
+# a=((1, 2), (3, 4))
+# b=((3, 4), (5, 6))
+# test_dict1={'key1': a, 'key2': b}
+# test_dict2={'key1': b, 'key2': a}
+# print(count_mean_tuple(a, b))
+
+def count_mean_dict(dict1, dict2):
+    mean_dict={}
+    for key in dict1.keys():
+        tup1=dict1[key]
+        tup2=dict2[key]
+        tup3=count_mean_tuple(tup1, tup2)
+        mean_dict[key]=tup3
+    return mean_dict
+
+model_kciuk=count_mean_dict(parse('kciuk1.txt'), parse('kciuk2.txt'))
+model_wskazujacy=count_mean_dict(parse('wskazujacy1.txt'), parse('wskazujacy2.txt'))
+model_srodkowy=count_mean_dict(parse('srodkowy1.txt'), parse('srodkowy2.txt'))
+model_serdeczny=count_mean_dict(parse('serdeczny1.txt'), parse('serdeczny2.txt'))
