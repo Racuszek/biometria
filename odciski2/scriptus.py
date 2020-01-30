@@ -33,10 +33,10 @@ def count_mean_tuple(tup1, tup2):
         long_list.append(tuple(mean_list))
     return tuple(long_list)
 
-a=((1, 2), (3, 4))
-b=((3, 4), (5, 6))
-test_dict1={'key1': a, 'key2': b}
-test_dict2={'key1': b, 'key2': a}
+# a=((1, 2), (3, 4))
+# b=((3, 4), (5, 6))
+# test_dict1={'key1': a, 'key2': b}
+# test_dict2={'key1': b, 'key2': a}
 # print(count_mean_tuple(a, b))
 
 def count_mean_dict(dict1, dict2):
@@ -63,7 +63,8 @@ def sum_distances(dict1, dict2):
     sum=0.
     for key in dict1.keys():
         for f, g in zip(dict1[key], dict2[key]):
-            print(f, g)
             sum+=points_distance(f, g)
-            print(sum)
-sum_distances(test_dict1, test_dict2)
+            return sum
+# sum_distances(test_dict1, test_dict2)
+model_kciuk=(count_mean_dict(parse('kciuk2.txt'), parse('kciuk3.txt')))
+print(sum_distances(parse('srodkowy1.txt'), model_kciuk))
