@@ -1,3 +1,5 @@
+from math import sqrt
+
 def parse(filename):
     # Given a file with feature vectors, it returns a dictionary, where key is the minutia name
     # and value is list of its feature vectors as tuples. We assume the file contains no double spaces.
@@ -31,10 +33,10 @@ def count_mean_tuple(tup1, tup2):
         long_list.append(tuple(mean_list))
     return tuple(long_list)
 
-# a=((1, 2), (3, 4))
-# b=((3, 4), (5, 6))
-# test_dict1={'key1': a, 'key2': b}
-# test_dict2={'key1': b, 'key2': a}
+a=((1, 2), (3, 4))
+b=((3, 4), (5, 6))
+test_dict1={'key1': a, 'key2': b}
+test_dict2={'key1': b, 'key2': a}
 # print(count_mean_tuple(a, b))
 
 def count_mean_dict(dict1, dict2):
@@ -52,9 +54,16 @@ model_srodkowy=count_mean_dict(parse('srodkowy1.txt'), parse('srodkowy2.txt'))
 model_serdeczny=count_mean_dict(parse('serdeczny1.txt'), parse('serdeczny2.txt'))
 
 def points_distance(tup1, tup2):
-    (tup1[0]-tup1[0])**2
+    if len(tup1)==3:
+        return sqrt((tup1[0]-tup2[0])**2+(tup1[1]-tup2[1])**2+(tup1[2]-tup2[2])**2)
+    elif len(tup1)==2:
+        return sqrt((tup1[0]-tup2[0])**2+(tup1[1]-tup2[1])**2)
 
 def sum_distances(dict1, dict2):
-    sum=0
+    sum=0.
     for key in dict1.keys():
-        
+        for f, g in zip(dict1[key], dict2[key]):
+            print(f, g)
+            sum+=points_distance(f, g)
+            print(sum)
+sum_distances(test_dict1, test_dict2)
